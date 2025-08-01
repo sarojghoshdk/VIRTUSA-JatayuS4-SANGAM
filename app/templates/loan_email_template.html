@@ -1,0 +1,70 @@
+<!-- templates/loan_email_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Arial', sans-serif; background: #f0f8ff; padding: 20px; color: #333; }
+    .header { text-align: center; }
+    .info { margin: 20px 0; }
+    .box { background: #dbeafe; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    .graph img { width: 100%; max-width: 600px; margin-top: 10px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #aaa; padding: 10px; }
+    th { background-color: #e0e7ff; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Loan Evaluation Report</h2>
+    <p><strong>Name:</strong> {{ name }}</p>
+    <p><strong>ID:</strong> {{ cid }}</p>
+  </div>
+
+  <div class="info">
+    <div class="box"><strong>Loan Eligibility:</strong> {{ eligible }}</div>
+    <div class="box"><strong>Interest Rate:</strong> {{ interest_rate }}%</div>
+    <div class="box"><strong>Max Loan Amount:</strong> ₹{{ max_loan }}</div>
+  </div>
+
+  <h3>Interest Rate Component Details</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Factor</th><th>Description</th><th>Impact</th><th>Numerical Impact (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in reasons_table %}
+      <tr>
+        <td>{{ row.factor }}</td><td>{{ row.description }}</td>
+        <td>{{ row.impact }}</td><td>{{ row.numerical_impact }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if suggestions %}
+  <div class="info">
+    <h3>📌 Suggestions</h3>
+    <ul>
+      {% for s in suggestions %}
+      <li>{{ s }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="graph-box">
+    <div class="graph-title"><h3>📊 Numerical Impact on Interest Rate by Factor</h3></div>
+    <img src="cid:numerical_impact" alt="Numerical Impact Chart">
+  </div>
+
+
+  <!--<h3>📊 Visual Charts</h3>
+  <div class="graph">
+    {% for cid in image_cids %}
+    <img src="cid:{{ cid }}">
+    {% endfor %}
+  </div>-->
+</body>
+</html>

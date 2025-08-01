@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/repayment.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navbar with Header Image -->
+<header>
+    <div class="navbar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/header2.png') }}" alt="Header Logo" class="logo">
+            <h1> DYNAMIC PRICING</h1>
+        </div>
+        <nav>
+            <a href="{{ url_for('home.home') }}"><i class="fas fa-home"></i> Home</a>
+            <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+            <a href="#features"><i class="fas fa-lightbulb"></i> Features</a>
+            <a href="#contact"><i class="fas fa-phone"></i> Contact</a>
+        </nav>
+    </div>
+</header>
+    <br><br>
+    <div class="overlay"></div>
+    <div class="container">
+        <h2>Loan Calculator</h2>
+        <div class="calculator-box">
+            <div class="input-section">
+                <label for="loan_amount">Loan Amount</label>
+                <span id="loan_value">&#8377; 25,000</span>
+                <input type="range" id="loan_amount" min="25000" max="2000000" step="1000" value="25000">
+                
+                <label for="tenure">Tenure</label>
+                <span id="tenure_value">6 Years</span>
+                <input type="range" id="tenure" min="1" max="30" step="1" value="6">
+                
+                <label for="interest_rate">Rate of Interest (%)</label>
+                <input type="number" id="interest_rate" value="8" step="0.1">
+                
+                <p class="note">This is a preliminary calculation and not the final offer.</p>
+                <button id="calculate">Calculate</button><br><br>
+                <button id="download_pdf" style="display:none;">Download Loan Repayment Report With Yearly Breakdown</button>
+            </div>
+            <div class="output-section">
+                <div id="graph-container">
+                    <h2>Loan Repayment Graph</h2><br>
+                    <div class="loading-spinner" id="loading"></div>
+                    <img id="loan-graph" src="/graph?0" alt="Loan Graph">
+                </div>
+                <div class="result-box">
+                    <p><strong>Monthly EMI:</strong> &#8377; <span id="emi"></span></p>
+                    <p><strong>Total Repayment:</strong> &#8377; <span id="total_repayment"></span></p>
+                    <p><strong>Interest Payable:</strong> &#8377; <span id="interest_payable"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loan_amount').addEventListener('input', function() {
+            document.getElementById('loan_value').textContent = `₹ ${parseInt(this.value).toLocaleString()}`;
+        });
+        document.getElementById('tenure').addEventListener('input', function() {
+            document.getElementById('tenure_value').textContent = `${this.value} Years`;
+        });
+        
+        document.getElementById('calculate').addEventListener('click', async () => {
+            document.getElementById('loading').style.display = 'block';
+            const loanAmount = parseFloat(document.getElementById('loan_amount').value);
+            const tenure = parseInt(document.getElementById('tenure').value);
+            const interestRate = parseFloat(document.getElementById('interest_rate').value);
+            
+            const response = await fetch('/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    loan_amount: loanAmount,
+                    tenure: tenure,
+                    interest_rate: interestRate
+                })
+            });
+            
+            const data = await response.json();
+            document.getElementById('emi').textContent = data.emi;
+            document.getElementById('total_repayment').textContent = data.total_repayment;
+            document.getElementById('interest_payable').textContent = data.interest_payable;
+            document.getElementById('loan-graph').src = `/graph?${new Date().getTime()}`;
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('download_pdf').style.display = 'block';
+        });
+
+        document.getElementById('download_pdf').addEventListener('click', async () => {
+            const loanAmount = parseFloat(document.getElementById('loan_amount').value);
+            const tenure = parseInt(document.getElementById('tenure').value);
+            const interestRate = parseFloat(document.getElementById('interest_rate').value);
+            
+            const response = await fetch('/download_pdf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    loan_amount: loanAmount,
+                    tenure: tenure,
+                    interest_rate: interestRate
+                })
+            });
+            
+            const blob = await response.blob();
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'Loan_Report.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
+
+    <br><br>
+    <!-- Footer Section with Social Icons -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>We provide dynamic financial solutions with personalized pricing for Fixed Deposits and Home Loans using Generative AI.</p>
+            </div>
+    
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#"><i class="fas fa-home"></i> Home</a>
+                <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="{{ url_for('fd.fd_index') }}"><i class="fas fa-coins"></i> FD Interest Rate</a>
+                <a href="{{ url_for('loan.loan_index') }}"><i class="fas fa-hand-holding-usd"></i> Loan Eligibility</a>
+                <a href="#contact"><i class="fas fa-phone"></i> Contact Us</a>
+            </div>
+    
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p><i class="fas fa-envelope" style="margin-right: 8px;"></i> support@sangamdynamicpricing.com</p>
+                <p><i class="fas fa-phone" style="margin-right: 8px;"></i> +91 9834216672</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="footer-bottom">
+            <p>&copy; 2025 SANGAM Dynamic Pricing. All rights reserved.</p>
+        </div>
+    
+        <div class="footer-bottom1" style="z-index: 1; pointer-events: auto;">
+            <p>Made by SANGAM Team:
+                <a href="https://www.linkedin.com/in/ananya-ghosh-462a68275/" target="_blank">Ananya Ghosh</a>,
+                <a href="https://www.linkedin.com/in/subhadeep-maity-434b16212/" target="_blank">Subhadeep Maity</a>,
+                <a href="https://www.linkedin.com/in/nilanjan-dutta-286206225/" target="_blank">Nilanjan Dutta</a>,
+                <a href="https://www.linkedin.com/in/saroj-ghosh-a0a952225/" target="_blank">Saroj Ghosh</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
+

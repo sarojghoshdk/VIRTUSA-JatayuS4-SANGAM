@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FD Created Successfully</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Ensure the body and html occupy full height */
+
+    body {
+      background-image: url("static/images/fd_success.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+      
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 30px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      backdrop-filter: blur(25px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .glass-card h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 30px;
+    }
+
+    .details-box {
+      background: white;
+      border-radius: 30px;
+      padding: 30px 20px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .details-box .icon {
+      font-size: 2rem;
+      color: #9c27b0;
+      margin-bottom: 10px;
+    }
+
+    .details-box p {
+      font-size: 1rem;
+      color: #111;
+      margin: 6px 0;
+    }
+
+    .download-btn {
+      margin-top: 20px;
+      display: inline-block;
+      background: linear-gradient(to right, #ff66b2, #c837ab);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    .download-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 1024px) {
+      .glass-card {
+        max-width: 90%;
+        padding: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 25px;
+      }
+
+      .download-btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .glass-card {
+        padding: 20px;
+      }
+
+      .glass-card h2 {
+        font-size: 1.4rem;
+      }
+
+      .details-box p {
+        font-size: 0.85rem;
+      }
+
+      .details-box .icon {
+        font-size: 1.5rem;
+      }
+
+      .download-btn {
+        font-size: 0.9rem;
+        padding: 10px 18px;
+      }
+    }
+    .navbar {
+    background: linear-gradient(135deg, rgba(173, 216, 230, 0.3), rgba(224, 255, 255, 0.3));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #2c3e50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 51, 102, 0.40);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 10;
+    margin: 20px auto;
+    width: 1200px;
+}
+
+.navbar:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+    margin-right: 12px;
+    transition: transform 0.5s ease;
+}
+
+.logo:hover {
+    transform: rotate(5deg) scale(1.05);
+}
+
+.navbar nav a {
+    color: #000033;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: 0.3s ease;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.navbar nav a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.dp {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    /* Footer Styling */
+    footer {
+    background: linear-gradient(135deg, #0a1a2f, #07101e);
+    color: #fff;
+    padding: 60px 20px 30px;
+    text-align: center;
+    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 0 25px rgba(116, 235, 213, 0.15);
+}
+
+footer:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(116, 235, 213, 0.3);
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.07), transparent);
+    animation: glowing 6s linear infinite;
+    z-index: 0;
+}
+
+@keyframes glowing {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+    gap: 30px;
+    text-align: left;
+}
+
+.footer-section {
+    flex: 1 1 250px;
+    min-width: 250px;
+    margin: 20px 0;
+    color: #fff;
+}
+
+.footer-section h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #fff;
+    font-weight: 700;
+    border-bottom: 2px solid #74EBD5;
+    padding-bottom: 8px;
+}
+
+.footer-section p {
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.footer-section a {
+    display: block; /* ensures vertical stacking */
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    margin-bottom: 10px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.footer-section a:hover {
+    color: #74EBD5;
+    transform: translateX(6px);
+}
+
+/* Social icons inside Contact section */
+.footer-social {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.footer-social a {
+    font-size: 20px;
+    color: #fff;
+    transition: transform 0.3s, color 0.3s;
+}
+
+.footer-social a:hover {
+    color: #74EBD5;
+    transform: scale(1.3) rotate(8deg);
+    text-shadow: 0 0 8px #74EBD5;
+}
+
+.footer-bottom,
+.footer-bottom1 {
+    margin-top: 30px;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #fff;
+    border-top: 1px solid #444;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.footer-bottom1 a {
+    color: #74EBD5;
+    text-decoration: none;
+    margin: 0 5px;
+    transition: color 0.3s;
+}
+
+.footer-bottom1 a:hover {
+    color: #3498db;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
+}
+
+    .dp{
+    font-size: inherit;
+    font-weight: inherit;
+    }
+
+    @keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.glass-card {
+  animation: fadeInUp 1s ease-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="logo-container">
+      <img src="{{ url_for('static', filename='images/header2.png') }}" alt="Logo" class="logo">
+      <h1 class="dp">DYNAMIC PRICING</h1>
+    </div>
+    <nav>
+      <a href="{{ url_for('home.home') }}"><i class="fas fa-home"></i> Home</a>
+      <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+      <a href="#features"><i class="fas fa-lightbulb"></i> Features</a>
+      <a href="#contact"><i class="fas fa-phone"></i> Contact</a>
+    </nav>
+  </header>
+
+  <!-- FD SUCCESS CARD -->
+  <div class="glass-card">
+    <h2>FD Created Successfully!</h2>
+    <div class="details-box">
+      <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+      <p><strong>Customer Name:</strong> {{ customer_name }}</p>
+      <p><strong>FD Account Number:</strong> {{ fd_account_number }}</p>
+      <p><strong>Amount:</strong> ₹{{ amount }}</p>
+      <p><strong>Period:</strong> {{ period }} years</p>
+      <p><strong>Interest Rate:</strong> {{ interest_rate }}%</p>
+      <p><strong>Maturity Amount:</strong> ₹{{ maturity_amount }}</p>
+
+      {% if pdf_url %}
+      <a href="{{ pdf_url }}" class="download-btn">Download FD Details (PDF)</a>
+      {% endif %}
+    </div>
+  </div><br><br>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>About Us</h3>
+            <p>We provide dynamic financial solutions with personalized pricing for Fixed Deposits and Home Loans using Generative AI.</p>
+        </div>
+
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+            <a href="{{ url_for('fd.fd_index') }}"><i class="fas fa-coins"></i> FD Interest Rate</a>
+            <a href="{{ url_for('loan.loan_index') }}"><i class="fas fa-hand-holding-usd"></i> Loan Eligibility</a>
+            <a href="#contact"><i class="fas fa-phone"></i> Contact Us</a>
+        </div>
+
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <p><i class="fas fa-envelope" style="margin-right: 8px;"></i> support@sangamdynamicpricing.com</p>
+            <p><i class="fas fa-phone" style="margin-right: 8px;"></i> +91 9834216672</p>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 SANGAM Dynamic Pricing. All rights reserved.</p>
+    </div>
+
+    <div class="footer-bottom1" style="z-index: 1; pointer-events: auto;">
+        <p>Made by SANGAM Team:
+            <a href="https://www.linkedin.com/in/ananya-ghosh-462a68275/" target="_blank">Ananya Ghosh</a>,
+            <a href="https://www.linkedin.com/in/subhadeep-maity-434b16212/" target="_blank">Subhadeep Maity</a>,
+            <a href="https://www.linkedin.com/in/nilanjan-dutta-286206225/" target="_blank">Nilanjan Dutta</a>,
+            <a href="https://www.linkedin.com/in/saroj-ghosh-a0a952225/" target="_blank">Saroj Ghosh</a>
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

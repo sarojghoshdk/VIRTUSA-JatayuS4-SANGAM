@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FD Interest Rate Result</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    /* ==== Base Styling ==== */
+body {
+  font-family: 'Times New Roman', Times, serif;
+  margin: 0;
+  background: linear-gradient(to right, #e0f7fa, #f0f8f7);
+  color: #1a3c40;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ==== Typography ==== */
+h1, h2, h3 {
+  color: #134e4a;
+  margin-bottom: 20px;
+}
+.info {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+.offered-rate {
+  font-size: 1.8rem;
+  margin: 20px 0;
+  color: #2e7d32;
+  font-weight: bold;
+}
+.subheading {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.highlight {
+  font-weight: bold;
+  color: #2b6cb0;
+  background-color: #ebf8ff;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+/* ==== Navbar ==== */
+.navbar {
+  background: linear-gradient(135deg, rgba(173, 216, 230, 0.3), rgba(224, 255, 255, 0.3));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #2c3e50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 51, 102, 0.40);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  margin: 20px auto;
+  max-width: 1200px;
+}
+.navbar:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+.logo {
+  height: 50px;
+  width: 50px;
+  margin-right: 12px;
+  transition: transform 0.5s ease;
+}
+.logo:hover {
+  transform: rotate(5deg) scale(1.05);
+}
+.navbar nav a {
+  color: #000033;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  transition: 0.3s ease;
+}
+.navbar nav a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ==== Result Boxes and Cards ==== */
+.flex-container, .factors, .additional-graphs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin: 40px 0;
+}
+.flex-item, .factor-card, .graph-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 128, 128, 0.1);
+  padding: 24px;
+  text-align: center;
+}
+.flex-item {
+  flex: 1;
+  min-width: 320px;
+  max-width: 500px;
+  height: 550px;
+}
+.factor-card {
+  width: 40%;
+  min-width: 300px;
+}
+.graph-card {
+  width: 400px;
+}
+
+/* ==== Rate & Confidence Box ==== */
+.rate-confidence-container {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 30px auto;
+  flex-wrap: wrap;
+}
+.rate-box {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 128, 128, 0.1);
+  padding: 0px;
+  text-align: center;
+  flex: 1;
+  height: 120px;
+  max-width: 250px;
+  color: #1a3c40;
+  transition: transform 0.3s ease;
+}
+.rate-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 128, 128, 0.2);
+}
+.rate-box h4 {
+  font-size: 1.3rem;
+  margin-bottom: -23px;
+  color: #134e4a;
+}
+.rate-box p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+/* ==== Scoring Table ==== */
+.scoring-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.scoring-table th, .scoring-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #b2dfdb;
+  text-align: center;
+}
+.scoring-table th {
+  background-color: #e0f2f1;
+  font-weight: bold;
+}
+.scoring-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ==== Text Lists ==== */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+.positive {
+  color: #2e7d32;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.negative {
+  color: #c62828;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* ==== Images ==== */
+img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-top: 16px;
+  object-fit: cover;
+}
+
+/* ==== Buttons ==== */
+.btn {
+  display: inline-block;
+  margin: 16px 12px;
+  padding: 12px 28px;
+  background-color: #2e7d32;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+.btn:hover {
+  background-color: #1b5e20;
+}
+
+/* ==== Customer Category Badge ==== */
+.customer-category-badge {
+  position: fixed;
+  top: 150px;
+  right: 40px;
+  background-color: #2b6cb0;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  font-weight: bold;
+  font-size: 15px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideDownFade 0.6s ease-out forwards;
+}
+@keyframes slideDownFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.close-badge {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 8px;
+  line-height: 1;
+}
+.pulse {
+  animation: slideDownFade 0.6s ease-out forwards, pulseGlow 2s infinite;
+}
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+  100% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); }
+}
+
+/* ==== Footer ==== */
+footer {
+  background: linear-gradient(135deg, #0a1a2f, #07101e);
+  color: #fff;
+  padding: 60px 20px 30px;
+  text-align: center;
+  line-height: 1.6;
+  position: relative;
+  box-shadow: 0 0 25px rgba(116, 235, 213, 0.15);
+}
+footer:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(116, 235, 213, 0.3);
+}
+footer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.07), transparent);
+  animation: glowing 6s linear infinite;
+  z-index: 0;
+}
+@keyframes glowing {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+  gap: 30px;
+  text-align: left;
+}
+.footer-section {
+  flex: 1 1 250px;
+  min-width: 250px;
+  margin: 20px 0;
+}
+.footer-section h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  border-bottom: 2px solid #74EBD5;
+  padding-bottom: 8px;
+}
+.footer-section p, .footer-section a {
+  font-size: 15px;
+}
+.footer-section a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.3s, transform 0.3s;
+}
+.footer-section a:hover {
+  color: #74EBD5;
+  transform: translateX(6px);
+}
+.footer-social {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 20px;
+}
+.footer-social a {
+  font-size: 20px;
+  color: #fff;
+  transition: transform 0.3s, color 0.3s;
+}
+.footer-social a:hover {
+  color: #74EBD5;
+  transform: scale(1.3) rotate(8deg);
+  text-shadow: 0 0 8px #74EBD5;
+}
+.footer-bottom,
+.footer-bottom1 {
+  margin-top: 30px;
+  padding: 10px 0;
+  font-size: 14px;
+  border-top: 1px solid #444;
+  text-align: center;
+}
+.footer-bottom1 a {
+  color: #74EBD5;
+  text-decoration: none;
+  margin: 0 5px;
+  transition: color 0.3s;
+}
+.footer-bottom1 a:hover {
+  color: #3498db;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .footer-section {
+    text-align: center;
+  }
+  .footer-social {
+    justify-content: center;
+  }
+}
+@media (max-width: 600px) {
+  .customer-category-badge {
+    top: 10px;
+    right: 10px;
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+  .close-badge {
+    font-size: 14px;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<!-- ========== Navigation Bar ========== -->
+<header class="navbar">
+  <div class="logo-container">
+    <img src="{{ url_for('static', filename='images/header2.png') }}" alt="Logo" class="logo" />
+    <h1 class="dp">DYNAMIC PRICING</h1>
+  </div>
+  <nav>
+    <a href="{{ url_for('home.home') }}"><i class="fas fa-home"></i> Home</a>
+    <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+    <a href="#features"><i class="fas fa-lightbulb"></i> Features</a>
+    <a href="#contact"><i class="fas fa-phone"></i> Contact</a>
+  </nav>
+</header>
+
+<!-- ========== Page Title & Customer Info ========== -->
+<h1>FD Interest Rate Result</h1>
+<h3><strong>Customer Name:</strong> {{ customer_name }}, <strong>Customer ID:</strong> {{ customer_id }}</h3>
+
+<!-- ========== Customer Category Badge ========== -->
+<div class="customer-category-badge {% if customer_category == 'Premium Customer' %}pulse{% endif %}" 
+     style="background-color: {{ category_color }}; color: {{ category_text_color }};" 
+     id="customerBadge">
+  {% if customer_category == "Premium Customer" %}
+    <i class="fas fa-gem"></i>
+  {% elif customer_category == "High-Value Customer" %}
+    <i class="fas fa-briefcase"></i>
+  {% elif customer_category == "Standard Customer" %}
+    <i class="fas fa-user"></i>
+  {% else %}
+    <i class="fas fa-exclamation-circle"></i>
+  {% endif %}
+  {{ customer_category }}
+  <button class="close-badge" onclick="document.getElementById('customerBadge').style.display='none';">&times;</button>
+</div>
+
+<!-- ========== Interest Rate & Confidence ========== -->
+<div class="rate-confidence-container">
+  <div class="rate-box">
+    <h4>Offered Interest Rate:</h4>
+    <p><strong>{{ interest_rate }}</strong></p>
+  </div>
+  <div class="rate-box">
+    <h4>Prediction Confidence:</h4>
+    <p><strong>{{ confidence_score }}%</strong></p>
+  </div>
+</div>
+
+<!-- ========== Reason Explanation ========== -->
+<div class="subheading">Why This Rate Was Assigned</div>
+<div class="info">
+  Your interest rate is based on a detailed evaluation of favorable and unfavorable parameters from your profile and market conditions.
+</div>
+
+<!-- ========== Reasoning Summary Table & Chart ========== -->
+<h2>Reasoning Summary</h2>
+<div class="flex-container">
+  <!-- Scoring Parameters Table -->
+  <div class="flex-item">
+    <h3>Scoring Parameters</h3>
+    <table class="scoring-table">
+      <thead>
+        <tr><th>S.No</th><th>Parameter</th><th>Score</th></tr>
+      </thead>
+      <tbody>
+        {% for row in summary_table %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ row.parameter }}</td>
+          <td>{{ row.score }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="2"><strong>Total</strong></td>
+          <td><strong>{{ total_score }}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Favorability:</strong> {{ favorability }}</p>
+    <p><strong>Overall Profile:</strong> {{ overall_profile }}</p>
+  </div>
+
+  <!-- Visual Chart -->
+  <div class="flex-item">
+    <h3>Visual Representation</h3>
+    <img src="data:image/png;base64,{{ image_base64 }}" alt="Summary Chart" />
+  </div>
+</div>
+
+<!-- ========== Factors Analysis Section ========== -->
+<h2>Factors Analysis</h2>
+<div class="factors">
+  <!-- Favorable Factors -->
+  <div class="factor-card">
+    <h3>Favorable Factors</h3>
+    <ul style="list-style: none; padding: 0;">
+      {% for reason in positive_reasons %}
+        <li class="positive">✔ {{ reason }}</li>
+      {% else %}
+        <li class="positive">✔ No positive factors.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Unfavorable Factors -->
+  <div class="factor-card">
+    <h3>Unfavorable Factors</h3>
+    <ul style="list-style: none; padding: 0;">
+      {% for reason in negative_reasons %}
+        <li class="negative">⚠ {{ reason }}</li>
+      {% else %}
+        <li class="negative">⚠ No negative factors.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<!-- ========== Email Submission Form ========== -->
+<form id="emailForm" method="POST">
+  <input type="email" name="email" placeholder="Enter your email" required />
+  <button type="submit">Send Result</button>
+</form>
+
+<script>
+// Handle email submission using AJAX
+document.getElementById('emailForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  fetch('/send_fd_result_email', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert(data.message);
+  })
+  .catch(error => {
+    alert('❌ Something went wrong while sending the email.');
+    console.error(error);
+  });
+});
+</script>
+
+<!-- ========== Action Buttons ========== -->
+<div>
+  <a href="/fd_download_pdf" class="btn" target="_blank">Download PDF Report</a>
+  <a href="{{ url_for('fd.fd_application', name=name, cid=cid, interest_rate=interest_rate) }}" class="btn">Apply for FD</a>
+  <a href="/fd_predict_form" class="btn">Predict Again</a>
+</div>
+
+<!-- ========== Additional Visual Insights ========== -->
+<h2>Additional Visual Insights</h2>
+<div class="additional-graphs">
+  <div class="graph-card">
+    <h3>Interest Rate Gauge</h3>
+    <img src="{{ url_for('static', filename='fd_graphs/gauge_chart.png') }}" alt="Gauge Chart" />
+  </div>
+  <div class="graph-card">
+    <h3>Customer vs. Market Rate</h3>
+    <img src="{{ url_for('static', filename='fd_graphs/comparison_chart.png') }}" alt="Comparison Chart" />
+  </div>
+  <div class="graph-card">
+    <h3>Customer Profile Contribution</h3>
+    <img src="{{ url_for('static', filename='fd_graphs/pie_chart.png') }}" alt="Pie Chart" />
+  </div>
+  <div class="graph-card">
+    <h3>Interest Rate Trend Line</h3>
+    <img src="{{ url_for('static', filename='fd_graphs/trend_chart.png') }}" alt="Trend Chart" />
+  </div>
+</div>
+
+<!-- ========== Footer Section ========== -->
+<footer>
+  <div class="footer-container">
+    <!-- About -->
+    <div class="footer-section">
+      <h3>About Us</h3>
+      <p>We provide dynamic financial solutions with personalized pricing for Fixed Deposits and Home Loans using Generative AI.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="#"><i class="fas fa-home"></i> Home</a>
+      <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+      <a href="{{ url_for('fd.fd_index') }}"><i class="fas fa-coins"></i> FD Interest Rate</a>
+      <a href="{{ url_for('loan.loan_index') }}"><i class="fas fa-hand-holding-usd"></i> Loan Eligibility</a>
+      <a href="#contact"><i class="fas fa-phone"></i> Contact Us</a>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p><i class="fas fa-envelope"></i> support@sangamdynamicpricing.com</p>
+      <p><i class="fas fa-phone"></i> +91 9834216672</p>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 SANGAM Dynamic Pricing. All rights reserved.</p>
+  </div>
+
+  <div class="footer-bottom1">
+    <p>Made by SANGAM Team:
+      <a href="https://www.linkedin.com/in/ananya-ghosh-462a68275/" target="_blank">Ananya Ghosh</a>,
+      <a href="https://www.linkedin.com/in/subhadeep-maity-434b16212/" target="_blank">Subhadeep Maity</a>,
+      <a href="https://www.linkedin.com/in/nilanjan-dutta-286206225/" target="_blank">Nilanjan Dutta</a>,
+      <a href="https://www.linkedin.com/in/saroj-ghosh-a0a952225/" target="_blank">Saroj Ghosh</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

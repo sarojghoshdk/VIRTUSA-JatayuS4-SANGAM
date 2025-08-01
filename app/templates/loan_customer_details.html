@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Eligibility Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='loan_styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, white, #c2e59c, #00f2fe, #d1e2f1);
+            padding: 0px;
+        }
+        h3 {
+            color: #2a3b8f;
+            font-size: 32px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .illustration img {
+            width: 600px;
+            height: auto;
+            margin-right: 70px;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            width: 450px;
+            box-shadow: 0px 5px 15px rgba(31, 31, 31, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+            font-weight: 600;
+            color: #042876;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        input, select {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            width: 100%;
+            font-size: 14px;
+            outline: none;
+            background: white;
+            color: #000;
+            transition: all 0.3s ease-in-out;
+        }
+        input:focus, select:focus {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.02);
+        }
+        button {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 12px;
+            transition: all 0.3s ease-in-out;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        button:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .illustration img {
+                width: 100%;
+                margin-bottom: 30px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar with Header Image -->
+<header>
+    <div class="navbar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/header2.png') }}" alt="Header Logo" class="logo">
+            <h1>DYNAMIC PRICING</h1>
+        </div>
+        <nav>
+            <a href="{{ url_for('home.home') }}"><i class="fas fa-home"></i> Home</a>
+            <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+            <a href="#features"><i class="fas fa-lightbulb"></i> Features</a>
+            <a href="#contact"><i class="fas fa-phone"></i> Contact</a>
+        </nav>
+    </div>
+</header>
+
+    <div class="container">
+        <div class="illustration">
+            <img src="{{ url_for('static', filename='images/loan.png') }}" alt="Person Working at Desk">
+        </div>
+        <div class="form-container">
+            <h3>Nice to meet you! 👋</h3><br><br>
+            <form action="/loan_predict_res" method="POST">
+                <input type="hidden" name="customer_name" value="{{ data['Customer Name'] }}">
+                <input type="hidden" name="customer_id" value="{{ data['Customer ID'] }}">
+
+                <label>🏡 Credit History</label>
+                <input type="number" name="credit_history" placeholder="Enter Credit Score" value="{{ data['Credit_History'] }}" readonly>
+                
+                <label>📜 Family Credit History</label>
+                <input type="number" name="family_credit_history" placeholder="Enter Family Credit Score" value="{{ data['Family_Credit_History'] }}" readonly>
+                
+                <label>⚠️ Risk Rating</label>
+                <input type="number" name="risk_rating" placeholder="Enter Risk Rating" value="{{ data['Risk_Rating'] }}" readonly>
+                
+                <label>🎂 Age</label>
+                <input type="number" name="age" min="18" max="100" placeholder="Enter Age" value="{{ data['Age'] }}" readonly>
+
+                <label>🤝 Customer Relationship (Years)</label>
+                <input type="number" name="customer_relationship" min="0" max="100" placeholder="Enter Years of Relationship" value="{{ data['Customer_Relationship_Years'] }}" readonly>
+
+                <label>📜 Past Transactions</label>
+                <select name="past_transactions" disabled>
+                    <option value="" disabled selected>🔽 Select an option</option>
+                    <option value="Positive" {% if data['Past_Transactions'] == 'Positive' %}selected{% endif %}>Positive</option>
+                    <option value="Negative" {% if data['Past_Transactions'] == 'Negative' %}selected{% endif %}>Negative</option>
+                </select>
+                <input type="hidden" name="past_transactions" value="{{ data['Past_Transactions'] }}">
+
+                <label>📈 Market Trends</label>
+                <select name="market_trends" disabled>
+                    <option value="" disabled selected>🔽 Select an option</option>
+                    <option value="Favorable" {% if data['Market_Trends'] == 'Favorable' %}selected{% endif %}>Favorable</option>
+                    <option value="Neutral" {% if data['Market_Trends'] == 'Neutral' %}selected{% endif %}>Neutral</option>
+                    <option value="Unfavorable" {% if data['Market_Trends'] == 'Unfavorable' %}selected{% endif %}>Unfavorable</option>
+                </select>
+                <input type="hidden" name="market_trends" value="{{ data['Market_Trends'] }}">
+
+                <button type="submit">📊 Predict Loan Eligibility</button>
+            </form>
+        </div>
+    </div>
+
+
+  <!-- Footer Section with Social Icons -->
+  <footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>About Us</h3>
+            <p>We provide dynamic financial solutions with personalized pricing for Fixed Deposits and Home Loans using Generative AI.</p>
+        </div>
+
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+            <a href="{{ url_for('fd.fd_index') }}"><i class="fas fa-coins"></i> FD Interest Rate</a>
+            <a href="{{ url_for('loan.loan_index') }}"><i class="fas fa-hand-holding-usd"></i> Loan Eligibility</a>
+            <a href="#contact"><i class="fas fa-phone"></i> Contact Us</a>
+        </div>
+
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <p><i class="fas fa-envelope" style="margin-right: 8px;"></i> support@sangamdynamicpricing.com</p>
+            <p><i class="fas fa-phone" style="margin-right: 8px;"></i> +91 9834216672</p>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 SANGAM Dynamic Pricing. All rights reserved.</p>
+    </div>
+
+    <div class="footer-bottom1" style="z-index: 1; pointer-events: auto;">
+        <p>Made by SANGAM Team:
+            <a href="https://www.linkedin.com/in/ananya-ghosh-462a68275/" target="_blank">Ananya Ghosh</a>,
+            <a href="https://www.linkedin.com/in/subhadeep-maity-434b16212/" target="_blank">Subhadeep Maity</a>,
+            <a href="https://www.linkedin.com/in/nilanjan-dutta-286206225/" target="_blank">Nilanjan Dutta</a>,
+            <a href="https://www.linkedin.com/in/saroj-ghosh-a0a952225/" target="_blank">Saroj Ghosh</a>
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

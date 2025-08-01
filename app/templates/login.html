@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Dynamic Pricing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Reset and default styles for all elements */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Ensure full viewport usage and center the content */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: url("{{ url_for('static', filename='images/login_bg.png') }}") center/cover no-repeat; /* Background image */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Main container styling */
+    .container {
+      display: flex;
+      padding: 30px;
+      border-radius: 30px;
+      width: 1000px;
+      background-color: rgba(255, 255, 255, 0.8); /* Frosted glass effect */
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25); /* Subtle shadow */
+      backdrop-filter: blur(5px); /* Blur background for modern effect */
+    }
+
+    /* Left section for illustration image */
+    .left {
+      width: 500px;
+      margin-right: -100px; /* Overlap effect with right side */
+    }
+
+    .left img {
+      width: 750px;
+      height: 750px;
+      object-fit: contain;
+      border-radius: 20px;
+    }
+
+    /* Right section for login form */
+    .right {
+      width: 400px;
+    }
+
+    .right h1 {
+      font-size: 2rem;
+      color: #0e0e0e;
+      margin-bottom: 10px;
+    }
+
+    .right p {
+      font-size: 1.1rem;
+      color: #0b0b0b;
+      margin-bottom: 25px;
+    }
+
+    /* Wrapper for each form field */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    /* Label styling */
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #0d0d0e;
+      font-weight: 500;
+    }
+
+    /* Input field styling */
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 12px;
+      border: 2px solid #1a237e;
+      background-color: #f9fbff;
+      font-size: 1rem;
+      box-shadow: 4px 4px 0 #1a237e;
+      transition: all 0.2s ease;
+    }
+
+    /* Focus effect on input fields */
+    input:focus {
+      background-color: #fff;
+      box-shadow: 2px 2px 0 #3949ab;
+    }
+
+    /* Submit button styling */
+    button {
+      margin-top: 10px;
+      width: 150px;
+      padding: 12px;
+      font-size: 1rem;
+      background-color: #1a237e;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #0d1333;
+      transition: all 0.3s ease;
+    }
+
+    /* Hover effect for button */
+    button:hover {
+      background-color: #303f9f;
+      transform: translateY(-2px);
+    }
+
+    /* Footer section (e.g., Forgot Password) */
+    .footer {
+      margin-top: 20px;
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: #151515;
+      text-decoration: none;
+    }
+
+    /* Top-left logo placement */
+    .logo-top {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+    }
+
+    .logo-top img {
+      width: 60px;
+    }
+
+    /* Responsive design for smaller screens (tablet/mobile) */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .left,
+      .right {
+        width: 100%;
+        margin: 0;
+        text-align: center;
+      }
+
+      .left img {
+        max-width: 90%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top-left logo -->
+  <div class="logo-top">
+    <img src="{{ url_for('static', filename='images/header2.png') }}" alt="Logo" />
+  </div>
+
+  <!-- Main login container -->
+  <div class="container">
+
+    <!-- Left Section: Illustration Image -->
+    <div class="left">
+      <img src="{{ url_for('static', filename='images/login_photo_1.png') }}" alt="Illustration" />
+    </div>
+
+    <!-- Right Section: Login Form -->
+    <div class="right">
+      <h1>Hello!<br>Welcome Back!</h1>
+      <p>Let’s Login to Your Account</p>
+
+      <!-- Flask-WTForms Login Form -->
+      <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <!-- Username Field -->
+        <div class="form-group">
+          <label for="username">Username</label>
+          {{ form.username(class="form-input", placeholder="Enter Username") }}
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          {{ form.password(class="form-input", placeholder="Enter Password") }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit">Login</button>
+
+        <!-- Flash Messages (e.g., Invalid login) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <p class="text-red-500 text-sm mt-3">{{ message }}</p>
+          {% endfor %}
+        {% endwith %}
+      </form>
+
+      <!-- Forgot Password Link -->
+      <div class="footer">
+        <a href="{{ url_for('home.contact_us') }}">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

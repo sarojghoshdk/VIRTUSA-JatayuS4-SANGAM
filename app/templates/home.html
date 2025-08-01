@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Pricing - Home</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /*Global Styles*/
+    body {
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe); /* Soft gradient background */
+        color: #0f172a; /* Dark slate text */
+        font-family: 'Times New Roman', Times, serif; /* Professional serif font */
+    }
+
+    /*Hero Section Styles*/
+    .hero {
+        background: url('https://source.unsplash.com/1600x900/?finance,bank') no-repeat center center/cover;
+        height: 600px; /* Full-height banner */
+    }
+
+    /*Card Hover Effect*/
+    .card {
+        transition: all 0.3s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-10px); /* Lift card on hover */
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    }
+
+    /*Button Hover Effect*/
+    .btn {
+    transition: all 0.3s;
+    }
+    .btn:hover {
+        transform: scale(1.05); /* Slightly enlarge button */
+        box-shadow: 0 0 15px #3b82f6; /* Blue glow */
+    }
+
+    /*Customer Reviews Auto-Scroll Animation*/
+    @keyframes scrollReviews {
+        0% {
+        transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+    .animate-scroll-reviews {
+        display: flex;
+        animation: scrollReviews 30s linear infinite;
+    }
+
+    /*Icon Sizing in Titles*/
+    .title-icon {
+        width: 32px;
+        height: 32px;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- =================== NAVBAR =================== -->
+<header>
+  <div class="navbar">
+    <div class="logo-container">
+      <img src="{{ url_for('static', filename='images/header2.png') }}" alt="Header Logo" class="logo">
+      <h1 class="dp"><strong>DYNAMIC PRICING</strong></h1>
+    </div>
+    <nav>
+      <a href="#"><i class="fas fa-home"></i> Home</a>
+      <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+      <a href="#features"><i class="fas fa-lightbulb"></i> Features</a>
+      <a href="{{ url_for('chatbot.chatbot_home') }}"><i class="fas fa-robot"></i> Chatbot</a>
+      <a href="{{ url_for('home.contact_us') }}"><i class="fas fa-phone"></i> Contact</a>
+    </nav>
+
+    <!-- User Dropdown Menu -->
+    {% if session['username'] and session['branch'] and session['role'] %}
+    <div class="relative">
+      <button id="userDropdownBtn" class="flex items-center bg-white text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-100 focus:outline-none">
+        <i class="fas fa-user-circle mr-2"></i>
+      </button>
+      <div id="dropdownMenu" class="absolute right-0 mt-2 w-56 bg-white border rounded shadow-lg hidden z-50">
+        <div class="px-4 py-3 border-b border-gray-200 text-gray-700">
+          <div class="font-semibold">{{ session['username'] }}</div>
+          <div class="font-semibold">Role: {{ session['role'] }}</div>
+          <div class="text-sm text-gray-500">Branch: {{ session['branch'] }}</div>
+        </div>
+        <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+          <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</header>
+
+<!-- =================== HERO SECTION =================== -->
+<section class="hero" id="hero">
+  <div class="hero-container">
+    <div class="hero-content">
+      <h1 class="hero-title">Personalized <br> Financial Solutions</h1>
+      <p class="hero-description">Smarter savings start here. AI personalized interest rates made for your profile.</p>
+      <div class="btn-container">
+        <a href="{{ url_for('fd.fd_index') }}" class="btn fd-btn"><i class="fas fa-chart-line"></i> FD Interest Rate</a>
+        <a href="{{ url_for('loan.loan_index') }}" class="btn loan-btn"><i class="fas fa-hand-holding-usd"></i> Loan Eligibility</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="static/images/main2.png" alt="Bank Illustration">
+    </div>
+  </div>
+</section>
+
+<!-- =================== ABOUT SECTION =================== -->
+<section class="about-us" id="about">
+  <h2 class="about-heading">About Us</h2>
+  <p class="about-description">
+    We offer AI-powered customized Fixed Deposit and Loan solutions. Our Generative AI system ensures dynamic pricing tailored to your financial profile.
+  </p>
+
+  <div class="stats-container">
+    <div class="stat-box">
+      <h3 class="stat" data-count="5000">0<span>+</span></h3>
+      <p>Happy Customers</p>
+    </div>
+    <div class="stat-box">
+      <h3 class="stat" data-count="99">0<span>%</span></h3>
+      <p>Customer Satisfaction</p>
+    </div>
+    <div class="stat-box">
+      <h3 class="stat" data-count="24">0<span>/7</span></h3>
+      <p>Support</p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== FEATURES SECTION =================== -->
+<section id="features" class="py-24 bg-white px-8 lg:px-24">
+  <div class="container mx-auto text-center">
+    <h3 class="text-5xl font-bold">✨ Key Features</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mt-12">
+
+      <!-- FD Prediction -->
+      <a href="{{ url_for('fd.fd_index') }}" class="card bg-blue-100 p-8 rounded-2xl hover:scale-105">
+        <img src="static/images/fd.png" alt="FD Rates" class="w-20 mx-auto">
+        <h4 class="text-2xl font-semibold mt-6">FD Rate Prediction</h4>
+        <p class="text-gray-600 mt-4 text-sm">AI-driven FD interest rates tailored to your profile.</p>
+      </a>
+
+      <!-- Loan Eligibility -->
+      <a href="{{ url_for('loan.loan_index') }}" class="card bg-green-100 p-8 rounded-2xl hover:scale-105">
+        <img src="static/images/loann.png" alt="Loan Eligibility" class="w-20 mx-auto">
+        <h4 class="text-2xl font-semibold mt-6">Loan Eligibility</h4>
+        <p class="text-gray-600 mt-4 text-sm">Predict loan eligibility instantly with AI accuracy.</p>
+      </a>
+
+      <!-- EMI Calculator -->
+      <a href="{{ url_for('calculator.repayment_index') }}" class="card bg-yellow-100 p-8 rounded-2xl hover:scale-105">
+        <img src="static/images/calculator.png" alt="EMI Calculator" class="w-20 mx-auto">
+        <h4 class="text-2xl font-semibold mt-6">Re-Payment Calculator</h4>
+        <p class="text-gray-600 mt-4 text-sm">Plan your EMIs with ease using our calculator.</p>
+      </a>
+
+      <!-- Download Section -->
+      <a href="{{ url_for('csv.csv_data_download') }}" class="card bg-yellow-100 p-8 rounded-2xl hover:scale-105">
+        <img src="https://cdn-icons-png.flaticon.com/512/3596/3596095.png" alt="Download Data" class="w-20 mx-auto">
+        <h4 class="text-2xl font-semibold mt-6">FD & Loan Data Download</h4>
+        <p class="text-gray-600 mt-4 text-sm">Download your financial data securely.</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- =================== TESTIMONIALS SECTION =================== -->
+<section class="reviews py-12 bg-white">
+  <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">
+    <i class="fas fa-comments-dollar text-green-600 mr-2"></i> CUSTOMER TESTIMONIALS
+    <i class="fas fa-comments-dollar text-green-600 mr-2"></i>
+  </h2>
+  <div class="overflow-hidden">
+    <div class="flex gap-6 animate-scroll-reviews w-max">
+      <!-- Repeatable Testimonial Cards (Example given) -->
+      {% for testimonial in testimonials %}
+      <div class="min-w-[500px] max-w-[300px] bg-[#ccffcc] p-6 rounded-xl shadow-md">
+        <div class="flex items-center mb-4">
+          <img src="{{ testimonial.image }}" alt="Customer" class="w-12 h-12 rounded-full mr-3">
+          <div>
+            <h4 class="text-black font-semibold">{{ testimonial.name }}</h4>
+            <p>{{ testimonial.rating }}</p>
+          </div>
+        </div>
+        <p class="text-black font-semibold">"{{ testimonial.comment }}"</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>About Us</h3>
+      <p>Dynamic AI-powered pricing for FDs and Loans using advanced analytics.</p>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="#"><i class="fas fa-home mr-2"></i> Home</a>
+      <a href="#about"><i class="fas fa-info-circle mr-2"></i> About</a>
+      <a href="{{ url_for('fd.fd_index') }}"><i class="fas fa-coins mr-2"></i> FD Interest Rate</a>
+      <a href="{{ url_for('loan.loan_index') }}"><i class="fas fa-hand-holding-usd mr-2"></i> Loan Eligibility</a>
+      <a href="{{ url_for('home.contact_us') }}"><i class="fas fa-phone mr-2"></i> Contact</a>
+    </div>
+
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p><i class="fas fa-envelope mr-2"></i> support@sangamdynamicpricing.com</p>
+      <p><i class="fas fa-phone mr-2"></i> +91 9834216672</p>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 SANGAM Dynamic Pricing. All rights reserved.</p>
+    <p>Made by SANGAM Team:
+      <a href="https://www.linkedin.com/in/ananya-ghosh-462a68275/" target="_blank">Ananya Ghosh</a>,
+      <a href="https://www.linkedin.com/in/subhadeep-maity-434b16212/" target="_blank">Subhadeep Maity</a>,
+      <a href="https://www.linkedin.com/in/nilanjan-dutta-286206225/" target="_blank">Nilanjan Dutta</a>,
+      <a href="https://www.linkedin.com/in/saroj-ghosh-a0a952225/" target="_blank">Saroj Ghosh</a>
+    </p>
+  </div>
+</footer>
+
+<!-- =================== JS INTERACTIONS =================== -->
+<script>
+  // Toggle dropdown
+  document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("userDropdownBtn");
+    const menu = document.getElementById("dropdownMenu");
+    if (btn) {
+      btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+      window.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) menu.classList.add("hidden");
+      });
+    }
+  });
+
+  // Count animation
+  function startCounting() {
+    const counters = document.querySelectorAll(".stat");
+    counters.forEach(counter => {
+      const target = parseInt(counter.getAttribute("data-count"));
+      let count = 0;
+      const speed = target > 100 ? 5 : 20;
+      const span = counter.querySelector("span");
+      const symbol = span ? span.textContent : "";
+
+      const update = () => {
+        count += Math.ceil(target / 100);
+        counter.firstChild.textContent = count > target ? target : count;
+        if (span) counter.appendChild(span);
+        if (count < target) setTimeout(update, 10);
+      };
+      update();
+    });
+  }
+
+  // About section animation
+  document.addEventListener("DOMContentLoaded", () => {
+    const about = document.querySelector(".about-us");
+    new IntersectionObserver(
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          about.classList.add("active");
+          startCounting();
+        }
+      }), { threshold: 0.3 }
+    ).observe(about);
+  });
+</script>
+
+</body>
+</html>
+

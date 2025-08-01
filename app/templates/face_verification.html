@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic Meta Tags -->
+  <meta charset="UTF-8" />
+  <title>Face Verification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Orbitron:wght@500&family=Space+Grotesk:wght@500&display=swap');
+
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styles with Gradient Background */
+    body {
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Main Container Styling */
+    .container {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 40px 30px;
+      width: 340px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      animation: floatIn 0.6s ease-out forwards;
+    }
+
+    /* Container Entry Animation */
+    @keyframes floatIn {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Title Styling */
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      color: #222;
+      margin-bottom: 20px;
+    }
+
+    /* Video Display Box Styling */
+    .video-frame {
+      width: 100%;
+      height: 200px;
+      background-color: #e8f0fe;
+      border: 2px solid #bcd1ee;
+      border-radius: 14px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Scanning Border Animation */
+    .video-frame.scanning {
+      border: 3px solid #00d084;
+      box-shadow: 0 0 15px #00d084;
+    }
+
+    /* Error Border Styling */
+    .video-frame.error {
+      border: 3px solid #e63946;
+      box-shadow: 0 0 15px #e63946;
+    }
+
+    /* Webcam Feed Styling */
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+
+    /* Capture Button Styling */
+    button {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: white;
+      border: none;
+      padding: 14px 26px;
+      font-size: 17px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    /* Button Hover Effects */
+    button:hover {
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      transform: scale(1.06);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.45);
+    }
+
+    /* Error Message Styling */
+    .error-message {
+      color: #e63946;
+      margin-top: 18px;
+      font-weight: 500;
+      font-size: 14px;
+      display: none;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    /* Show Error Message */
+    .error-message.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Responsive Design for Mobile */
+    @media (max-width: 420px) {
+      .container {
+        width: 90%;
+        padding: 25px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- UI Container for Webcam and Button -->
+  <div class="container">
+    <h2>Verifying Your Face...</h2>
+
+    <!-- Webcam Display Area -->
+    <div class="video-frame" id="video-frame">
+      <video id="video" autoplay></video>
+    </div>
+
+    <!-- Capture Button -->
+    <button onclick="capture()">Capture & Verify</button>
+
+    <!-- Hidden Canvas for Capturing Frame -->
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <!-- Error Message -->
+    <div class="error-message" id="status">Face not matching. Access Denied.</div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const statusText = document.getElementById('status');
+    const videoFrame = document.getElementById('video-frame');
+
+    // Access the user's webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        // If user denies access to camera
+        statusText.innerText = "Camera access denied.";
+        statusText.classList.add("show");
+        videoFrame.classList.add("error");
+      });
+
+    // Function to capture webcam image and send to backend
+    function capture() {
+      // Clear previous error states
+      videoFrame.classList.remove('error');
+      statusText.classList.remove('show');
+
+      // Start scanning animation
+      videoFrame.classList.add('scanning');
+      setTimeout(() => {
+        videoFrame.classList.remove('scanning');
+      }, 2000);
+
+      // Capture image from video feed
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0);
+      const image = canvas.toDataURL('image/jpeg');
+
+      // Send captured image to backend for face verification
+      fetch('/verify_face', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: image })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Redirect to home if face verified
+          window.location.href = "/home";
+        } else {
+          // Show error if face does not match
+          statusText.innerText = "Face not matching. Access Denied.";
+          statusText.classList.add("show");
+          videoFrame.classList.add("error");
+        }
+      })
+      .catch(error => {
+        // Show generic error if server call fails
+        statusText.innerText = "Verification failed.";
+        statusText.classList.add("show");
+        videoFrame.classList.add("error");
+      });
+    }
+  </script>
+
+</body>
+</html>
+

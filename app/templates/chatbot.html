@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SANGAM AI Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+      padding: 20px;
+    }
+
+    .chat-container {
+      background-color: #fff;
+      width: 400px;
+      height: 620px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(1, 53, 104, 0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chat-header {
+      background-color: #49aaf0;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message {
+      margin-bottom: 12px;
+      line-height: 1.5;
+      padding: 10px;
+      border-radius: 12px;
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+
+    .chat-message.user {
+      background-color: #d1e7fd;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .chat-message.bot {
+      background-color: #eaf4fe;
+      align-self: flex-start;
+    }
+
+    .chat-input-area {
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #eee;
+      padding: 10px;
+      background-color: #fff;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .chat-button {
+      background-color: #49aaf0;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      margin-left: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .chat-button:hover {
+      background-color: #3395d2;
+    }
+
+    .chat-options {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .chat-options button {
+      width: 48%;
+      padding: 10px;
+      background-color: #49aaf0;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chat-options button:hover {
+      background-color: #3395d2;
+    }
+
+    .contact-link {
+      text-align: center;
+      padding: 12px;
+      background-color: #f0f8ff;
+      border-top: 1px solid #ccc;
+    }
+
+    .contact-link a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .contact-link a:hover {
+      text-decoration: underline;
+    }
+
+    .robot-icon-bg {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    .robot-icon-bg img {
+      width: 400px;
+      height: 400px;
+    }
+    .submit-button {
+      margin-top: 20px;
+    }
+
+    .submit-button button {
+      width: 100%;
+      background-color: #49aaf0;
+      color: white;
+      font-size: 1.1rem;
+      padding: 12px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .submit-button button:hover {
+      background-color: #3395d2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">SANGAM AI Chatbot</div>
+
+    <div class="chat-body" id="chat-body">
+      <div class="chat-message bot">Hi! It's SANGAM AI. What can I help you with today?</div>
+      <div class="chat-options" id="option-buttons">
+        <button onclick="selectOption('know_customer')">Know Customer Details</button>
+        <button onclick="selectOption('website_issue')">Query About Website</button>
+      </div>
+    </div>
+
+    <div class="chat-input-area" style="display: none;" id="chat-input-area">
+      <input type="text" class="chat-input" id="chat-input" placeholder="Type your response..." />
+      <button class="chat-button" onclick="sendInput()">Send</button>
+    </div>
+
+    <div class="contact-link">
+      <i class="fas fa-envelope"></i> <a href="mailto:support@sangam.ai">Contact Support</a>
+    </div>
+    <div class="submit-button">
+        <a href="{{ url_for('home.home') }}">
+          <button type="button">BACK TO HOME</button>
+        </a>
+    </div>
+  </div>
+
+
+  <div class="robot-icon-bg">
+    <img src="{{ url_for('static', filename='images/bot_logo.png') }}" alt="AI Robot" />
+  </div>
+
+  <script>
+    let chatStage = "";
+    let customerData = {};
+
+    function addMessage(sender, text) {
+      const chatBody = document.getElementById("chat-body");
+      const msg = document.createElement("div");
+      msg.className = `chat-message ${sender}`;
+      msg.innerText = text;
+      chatBody.appendChild(msg);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function selectOption(option) {
+      document.getElementById('option-buttons').style.display = 'none';
+      document.getElementById('chat-input-area').style.display = 'flex';
+
+      if (option === 'know_customer') {
+        chatStage = "awaiting_name";
+        addMessage('bot', 'Please enter the Customer Name:');
+      } else if (option === 'website_issue') {
+  chatStage = "faq_query";
+  addMessage('bot', 'Please type your query related to the website (e.g., "How to apply for FD?")');
+      }
+    }
+
+    function sendInput() {
+      const input = document.getElementById("chat-input").value.trim();
+      if (input === "") return;
+
+      addMessage('user', input);
+      document.getElementById("chat-input").value = "";
+
+      if (chatStage === "awaiting_name") {
+        customerData.name = input;
+        chatStage = "awaiting_id";
+        addMessage('bot', 'Please enter the Customer ID:');
+      } else if (chatStage === "awaiting_id") {
+        customerData.id = input;
+        fetch('/get_customer_details', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(customerData)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            addMessage('bot', "Customer not found. Please try again.");
+            chatStage = "awaiting_name";
+            return;
+          }
+
+          addMessage('bot', `Customer Info:
+Name: ${data.name}
+ID: ${data.id}
+Credit History: ${data.credit_history}
+Risk Rating: ${data.risk_rating}
+Age: ${data.age}
+Relationship: ${data.relationship_years} years
+Past Transactions: ${data.past_transactions}
+Market Trends: ${data.market_trends}`);
+
+          addMessage('bot', `FD Info:
+FD Count: ${data.fd_count}
+Details:
+${data.fds.join('\n')}`);
+
+          addMessage('bot', `Loan Info:
+Loan Count: ${data.loan_count}
+Details:
+${data.loans.join('\n')}`);
+
+          chatStage = "awaiting_name";
+          customerData = {};
+          addMessage('bot', "Would you like to check another customer? Please enter the Customer Name:");
+        });
+      }
+
+      else if (chatStage === "faq_query") {
+  const lowerQuestion = input.toLowerCase().trim();
+  if (faqAnswers[lowerQuestion]) {
+    addMessage('bot', faqAnswers[lowerQuestion]);
+  } else {
+    addMessage('bot', "Sorry, I don't have an answer for that. Please contact the admin.");
+  }
+}
+
+    }
+
+    const faqAnswers = {
+  "how to check loan eligibility": "To check loan eligibility, go to the Loan Eligibility page, enter customer name and ID. The system will fetch data and show eligibility, interest rate, and reasoning.",
+  "how to check fd interest rate": "To check FD interest rate, go to the FD Interest page, enter customer name and ID. The system will fetch data and display the predicted interest rate and maturity.",
+  "how to apply for fd": "After getting the predicted FD rate, click on 'Apply for FD'. Fill amount and time period, and submit the form.",
+  "how to apply for loan": "After eligibility check, click on 'Apply for Loan'. Fill the required fields and submit for approval.",
+  "how to login": "Login using your User ID, and Password. You will be redirected to the Home Page."
+};
+
+  </script>
+</body>
+</html>

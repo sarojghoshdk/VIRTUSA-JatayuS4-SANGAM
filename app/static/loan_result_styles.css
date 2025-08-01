@@ -1,0 +1,343 @@
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2C3E50, #4CA1AF);
+    color: #333;
+    min-height: 100vh;
+}
+
+/* Header Styling */
+.navbar {
+    background: #2c3e50;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+
+.navbar:hover {
+    transform: scale(1.02);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 60px;
+    margin-right: 15px;
+    transition: transform 0.5s;
+}
+
+.logo:hover {
+    transform: rotate(360deg);
+}
+
+.navbar nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.navbar nav a:hover {
+    background: #3498db;
+    border-radius: 5px;
+    transform: translateY(-5px);
+}
+
+.dp{
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Container */
+.container {
+    max-width: 1300px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 60px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* Interest Rate Card */
+.result-card {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: #fff;
+    padding: 40px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+}
+.result-card:hover {
+    transform: scale(1.05);
+}
+
+.rate-label {
+    font-weight: bold;
+    font-size: 22px;
+    color: #fff;
+    margin: 20px 0;
+}
+.amount-label {
+    font-weight: bold;
+    font-size: 22px;
+    color: #fff;
+    margin: 20px 0;
+}
+.rate-value {
+    font-size: 52px;
+    font-weight: bold;
+    color: #f6f6f5;
+}
+
+.success {
+    color: #28a745;
+    font-size: 32px;
+    margin: 20px 0;
+}
+
+.fail {
+    color: #dc3545;
+    font-size: 32px;
+    margin: 20px 0;
+}
+.fail-label {
+    font-weight: bold;
+    font-size: 29px;
+    color: #fff;
+    margin: 20px 0;
+}
+.reason-label {
+    font-size: 20px;
+    color: #fff;
+    margin: 20px 0;
+}
+ul {
+    list-style-position: inside;  
+    padding-left: 0;              
+    margin-left: 0;               
+}
+
+li {
+    margin: 10px 0;              
+    line-height: 1.6;             
+}
+
+/*reason & Suggestion*/
+.graph-box {
+    margin-top: 40px;
+    background-color: #e8f5e9;
+    padding: 20px;
+    border-left: 5px solid #4CAF50;
+    border-radius: 8px;
+}
+
+.graph-title {
+    font-size: 20px;
+}
+
+/* Graphs */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin-top: 40px;
+}
+.graph-card {
+    background: #f5f5f5;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+.graph-card:hover {
+    transform: translateY(-10px);
+}
+.graph-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Button */
+.btn {
+    display: block;
+    width: 240px;
+    margin: 50px auto;
+    padding: 15px 35px;
+    text-align: center;
+    background: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+.btn:hover {
+    background: #2980b9;
+    transform: translateY(-8px);
+}
+
+/* Footer Styling */
+footer {
+    background: linear-gradient(135deg, #2c3e50, #1a252f);
+    color: #fff;
+    padding: 80px 0;
+    text-align: center;
+    line-height: 1.8;
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    animation: glowing 6s infinite;
+    z-index: 0;
+}
+
+/* Glowing Animation */
+@keyframes glowing {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Footer Container */
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+/* Footer Section Styling */
+.footer-section {
+    flex: 1;
+    min-width: 280px;
+    margin: 20px;
+    transition: transform 0.3s;
+}
+
+/* Glassmorphism Effect */
+.footer-section:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.footer-section h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #74EBD5;
+}
+
+.footer-section p {
+    color: #ccc;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    display: block;
+    color: #1abc9c;
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.footer-section a:hover {
+    color: #3498db;
+    transform: translateX(10px);
+}
+
+/* Social Media Icons */
+.footer-social {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.footer-social a {
+    margin: 0 15px;
+    font-size: 28px;
+    color: #fff;
+    transition: transform 0.3s, color 0.3s;
+}
+
+/* Icon Hover Effect */
+.footer-social a:hover {
+    color: #74EBD5;
+    transform: scale(1.4) rotate(10deg);
+    text-shadow: 0 0 12px #74EBD5;
+}
+
+/* Copyright Section */
+.footer-bottom {
+    margin-top: 10px;
+    padding: 20px 0;
+    border-top: 1px solid #444;
+    color: #ccc;
+    font-size: 16px;
+}
+
+/* Footer Responsive Design */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-section {
+        margin: 20px 0;
+    }
+
+    .footer-social a {
+        font-size: 24px;
+        margin: 10px;
+    }
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-section {
+        margin: 15px 0;
+    }
+}
+
+
+
