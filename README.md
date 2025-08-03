@@ -17,7 +17,7 @@
   - Highlights favorable/unfavorable factors.
   - Offers a scoring summary with explainable charts.
 
-- 📊 **Explainable AI (XAI)**  
+- 📊 **Explainable AI**  
   - Charts, tables, and narrative reasoning to justify predictions.
 
 - 📥 **PDF Report Generation**  
